@@ -1,0 +1,20 @@
+<import src="../../wxParse/wxParse.wxml" />
+<view class="container">
+  <view class="topic-head">
+    <image class="content-img" src="{{topics.pic}}"></image>
+    <view class="topic-title">
+      <view class="head-name">{{topics.author}}</view>
+      <view class="content-title">{{topics.title}}</view>
+    </view>
+  </view>
+  <view class="topic-content">
+    <view class="content-text">
+      <view class="content-box">
+        <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
+      </view>
+    </view>
+  </view>
+  <view class="topic-footer" bindtap="storeTap" data-id="{{topics.keywords}}" hidden="{{topics.keywords != 0 ? '':'true'}}">
+    <view class="store">访问店铺</view>
+  </view>
+</view>

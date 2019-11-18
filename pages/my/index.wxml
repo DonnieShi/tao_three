@@ -1,0 +1,49 @@
+<view class="container">
+	<view class="userinfo">
+    <open-data class="userinfo-avatar" type="userAvatarUrl"></open-data>
+    <open-data class="userinfo-nickname" type="userNickName"></open-data>
+    <button wx:if="{{!userMobile}}" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">点击绑定手机号码</button>
+    <text wx:if="{{userMobile}}" class="relogin">{{userMobile}}</text>
+	</view>
+  <view class="userinfo-money">
+    <view class="user-money">
+      <navigator url="/pages/recharge/index" hover-class="none">
+        <image src="../../images/my/money.png" />余额<text>{{balance}}</text>
+      </navigator>
+    </view>
+    <view class="user-score">
+      <navigator url="/pages/score/index" hover-class="none">
+        <image src="../../images/my/ticket_me.png" />积分<text>{{score}}</text>
+      </navigator>
+    </view>
+  </view>
+  <view class="userinfo-order">
+      <view class="order-title" bindtap="goorderlist" data-index="4">我的订单</view>
+    <view class="order-icon-list">
+      <view class="order-icon" bindtap="goorderlist" data-index="0">
+        <view class="{{tabClass[0]}}"></view>
+        <image src="../../images/my/mine_doing.png"></image>
+        待付款
+      </view>
+      <view class="order-icon" bindtap="goorderlist" data-index="2">
+        <view class="{{tabClass[1]}}"></view>
+        <image src="../../images/my/mine_done.png"></image>
+        待收货
+      </view>
+      <view class="order-icon" bindtap="goorderlist" data-index="3">
+        <view class="{{tabClass[2]}}"></view>
+        <image src="../../images/my/mine_comment.png"></image>
+        待评价
+      </view>
+    </view>
+  </view>
+  <view class="userinfo-list-item">
+    <view class="userinfo-item">
+      <navigator url="/pages/mycoupons/index" hover-class="none">我的饭票</navigator>
+    </view>
+    <view class="userinfo-item">
+      <navigator url="/pages/select-address/index" hover-class="none">我的地址</navigator>
+    </view>
+    <view class="userinfo-number">{{service.value}}</view>
+  </view>
+</view>

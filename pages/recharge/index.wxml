@@ -1,0 +1,41 @@
+<view class="container">
+  <view class="recharge-money">
+    <view class="money-pro">
+      <view class="money-title">可用余额</view>
+      <view class="money-number">{{balance}}<text>元</text></view>
+      <view class="money-info">付款时优先使用余额进行支付</view>
+    </view>
+  </view>
+  <view class="recharge-box">
+    <view class="box-banner">
+      <view class="banner-list" wx:for="{{recharges}}" wx:key="id">
+        <image src="{{item.picUrl}}" />
+        <view class="banner-name">{{item.title}}</view>
+        <view class="banner-text">{{item.remark}}</view>
+      </view>
+    </view>
+    <view class="box-money">
+      <view class="box-money-list">
+        <radio-group class="radio-group" bindchange="radioChange">
+          <label class="radio" wx:for="{{scores}}" wx:key="{{index}}">
+            <view class="list-group">
+              <view class="score-box"></view>
+              <radio value="{{item.confine}}" color="#ee5a52"/>
+              <view class="money-list-group"></view>
+              <view class="money-list-number">
+                {{item.confine}}<text>元</text>
+              </view>
+              <view class="money-list-info">
+                可得<text>{{item.score}}</text>积分
+              </view>
+            </view>
+          </label>
+        </radio-group>
+      </view>
+    </view>
+    <view class="recharge-fooder">
+      <view class="fooder-info">还需支付：<text>{{amount}}元</text></view>
+      <view class="fooder-btn" bindtap="btnChange">去充值</view>
+    </view>
+  </view>
+</view>

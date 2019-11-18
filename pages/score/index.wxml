@@ -1,0 +1,37 @@
+<view class="container"> 
+  <view class="score-header">
+    <view class="score-number">{{score}}</view>
+    <view class="score-info">可用积分</view>
+    <view class="yao">
+      <image hidden="{{ ci >= 1 ? 'true':'' }}" class="score-yao" src="../../images/yaoyiyao.png" />
+      <view hidden="{{ ci >= 1 ? '':'true' }}" class="score-btn">今日已签到</view>
+    </view>
+    <view class="score-times">
+      <view wx:for="{{rules}}" wx:key="rules" class="times-list {{ score_sign_continuous >= item.continuous ? 'item-on':'' }}">
+        <view class="times-score">+{{item.score}}</view>
+        <text class="times-pus"></text>
+        <view class="times-line"></view>
+        <view class="times-day">{{item.continuous}}天</view>
+      </view>
+    </view>
+  </view>
+  <view class="score-coupons">
+    <view class="coupons-box">
+      <view class="coupons-list" wx:for-items="{{scores}}" wx:key="{{index}}">
+        <image src="../../images/ticket.png" />
+        <view class="coupons-info">
+          <view class="coupons-name">{{item.moneyMax}}元</view>
+          <view class="coupons-type">{{item.name}}</view>
+          <view class="coupons-day">连续签到{{item.needSignedContinuous}}天可领取</view>
+          <view hidden="{{ score_sign_continuous >= item.needSignedContinuous ? '':'true' }}" class="coupons-btn {{ score_sign_continuous >= item.needSignedContinuous ? 'active':'' }}" bindtap="gitCoupon" data-id="{{item.id}}">可领取</view>
+          <view hidden="{{ score_sign_continuous >= item.needSignedContinuous ? 'true':'' }}" class="coupons-btn">差{{item.needSignedContinuous - score_sign_continuous}}天</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="score-store">
+    <navigator url="/pages/score-store/index" hover-class="none">
+      <image src="../../images/ribbon.png" />
+    </navigator>
+  </view>
+</view>

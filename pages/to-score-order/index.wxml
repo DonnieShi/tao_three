@@ -1,0 +1,59 @@
+<view class="container">
+  <form bindsubmit="createOrder" report-submit="true">
+    <view class="address-box">
+      <view class="add-address" hidden="{{curAddressData}}">
+        <view class="title" bindtap="addAddress">新增收货地址</view>
+      </view>
+      <view class="show-address" hidden="{{!curAddressData}}" bindtap="selectAddress">
+        <view class="name-tel">{{curAddressData.linkMan}}  {{curAddressData.mobile}}</view>
+        <view class="addr-text">{{curAddressData.address}}</view>
+      </view>
+      <view class="addres-row-box">
+        <view class="row-label">配送方式</view>
+        <view class="right-text" wx:if="{{yunPrice > 0}}">快递</view>
+        <view class="right-text" wx:if="{{yunPrice == 0}}">包邮</view>
+      </view>
+    </view>
+    <view class="goods-list">
+      <view class="a-goods" wx:for-items="{{goodsList}}" wx:key="{{index}}">
+        <view class="text-box">
+          <view class="box-name">{{item.name}}</view>
+          <view class="box-money">{{totalScoreToPay * item.number}}</view>
+          <view class="box-num">
+            {{totalScoreToPay}}<text>x{{item.number}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="goods-info">
+      <view class="row-box">
+        <view class="row-label">所需积分</view>
+        <view class="right-text">{{totalScoreToPay}}</view>
+      </view>
+      <view class="row-box" wx:if="{{yunPrice > 0}}">
+        <view class="row-label">运费</view>
+        <view class="right-text">¥{{yunPrice}}</view>
+      </view>
+    </view>
+    <view class="peisong-way">
+      
+      <view class="row-box">
+        <view class="row-label">备注</view>
+        <view class="right-text">
+          <input name="remark" type="text" class="liuyan" placeholder="如需备注请输入" />  
+        </view>
+      </view>
+    </view>
+    <view class="jiesuan-box">
+      <view class="left-price">
+        <view class="total">
+          合计：<text>{{totalScoreToPay}}积分</text>
+          <block wx:if="{{yunPrice > 0}}">
+             + <text>¥{{yunPrice}}运费</text> 
+          </block>
+        </view>
+      </view>
+      <button class="to-pay-btn" formType="submit">确认兑换</button>
+    </view>
+  </form>
+</view>

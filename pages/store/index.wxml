@@ -1,0 +1,145 @@
+<import src="../../wxParse/wxParse.wxml" />
+
+<view class="container">
+  <view class="store_header">
+    <image class="store_bg" src="{{stores.pic}}" />
+    <view class="store_wellcom">嗨，欢迎光临</view>
+    <view class="store_info">
+      <image class="store_avatar" src="{{stores.characteristic}}" />
+      <view class="share_nol">
+        <button class="share" open-type="share">
+          <image src="../../images/share.png" />
+        </button>
+        <button class="phone" bindtap="calling" data-id="{{stores.linkPhone}}">
+          <image src="../../images/icon_chat.png" />
+        </button>
+      </view>
+      <view class="store_name">{{stores.name}}</view>
+      <view class="store_disw">{{stores.introduce}}</view>
+      <view class="store_adds">
+        <image src="../../images/location.png" /> {{stores.address}}
+      </view>
+    </view>
+    <view class="store_notic">
+      <image src="../../images/broadcast.png" hidden="{{notices.length > 0 ? false : true }}"></image>
+      <swiper class="swiper_container" vertical="true" autoplay="true" circular="true" interval="3000">
+        <block wx:for="{{notices}}" wx:key="id">
+          <swiper-item>
+            <view class="swiper_item" bindtap="noticesTap" data-id="{{item.id}}">
+              {{item.title}}
+            </view>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+  </view>
+  <view class="store_product">
+    <view class="swiper-tab">
+      <view class="swiper-tab-list {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichNav">菜品({{cgoods}})</view>
+      <view class="swiper-tab-list {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichNav">点评({{cdis}})</view>
+    </view>
+    <swiper current="{{currentTab}}" class="swiper-box {{navigationbar}}" bindchange="bindChange">
+      <!-- 所有菜品 -->
+      <swiper-item class="{{navigationbar}}">
+        <view class="type-container">
+          <view wx:for-items="{{categories}}" wx:key="id" class="type-box {{activeCategoryId == item.id ? 'type-item-of' : ''}}" bindtap="tabClick" id="{{item.id}}">
+            <view class="type-navbar-item {{activeCategoryId == item.id ? 'type-item-on' : ''}}">{{item.name}}</view>
+          </view>
+        </view>
+        <view class="type-product {{navigationbar}}">
+          <view class="goods-box" wx:for-items="{{goods}}" wx:key="{{index}}">
+            <view class="img-box">
+              <image src="{{item.pic}}_m" class="image" mode="aspectFill" lazy-load="true" />
+            </view>
+            <view class="goods-info">
+              <view class="goods-title">{{item.name}}</view>
+              <view class="goods-stores">还剩{{item.stores}}份 · {{item.numberOrders}}人品尝过</view>
+              <view class="goods-minPrice">¥{{item.minPrice}}
+                <text>¥{{item.originalPrice}}</text>
+              </view>
+              <view class="goods-add">
+                <view class="stepper">
+                  <text class="{{minusStatus}}" data-current="{{item.id}}" bindtap="bindMinus">-</text>
+                  <input type="number" value="{{ nums[item.id] ? nums[item.id] : 0}}" disabled />
+                  <text class="normal" data-current="{{item.id}}" bindtap="bindPlus">+</text>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view hidden="{{loadingMoreHidden ? true : false}}" class="no-more-goods">
+            <image src="../../images/no_dish.png" />
+            <view class="text">还没有菜品呢</view>
+          </view>
+        </view>
+      </swiper-item>
+      <!-- 吃货点评 -->
+      <swiper-item class="{{navigationbar}}">
+        <view class="goods-comment">
+          <view class="goods-comment-list" wx:for="{{reputation}}" wx:key="id">
+            <view class="comment-avatar">
+              <image src="{{item.user.avatarUrl}}" />
+            </view>
+            <view class="comment-info">
+              <view class="comment-title">{{item.user.nick}}</view>
+              <view class="comment-start">{{item.goods.goodReputationStr}}</view>
+              <view class="comment-text">{{item.goods.goodReputationRemark}}</view>
+              <view class="comment-times">{{item.goods.dateReputation}}</view>
+              <view class="comment-product">{{item.goods.property}}</view>
+            </view>
+          </view>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+  <view class="fooder" hidden="{{shopNum == 0 ? 'true':''}}">
+    <view class="fooder-cat" data-current="{{stid}}" bindtap="goShopCar">
+      <view class="shopping_cat">
+        <image src="../../images/shopping_cart.png" />
+      </view>
+      <text>{{shopNum}}</text>
+    </view>
+    <view class="fooder-money">¥{{totalPrice}}</view>
+    <view class="fooder-btn" bindtap="goShopCar">确认菜品</view>
+  </view>
+  <!-- 弹窗 -->
+  <view class="show-notice" hidden="{{noticePopup}}" bindtap="noticPopupTap">
+    <view class="show-notice-title">{{notice.title}}</view>
+    <view class="show-notice-text">
+      <template is="wxParse" data="{{wxParseData:article.nodes}}" />
+    </view>
+    <image src="../../images/notice_close_icon.png" />
+  </view>
+  <view class="show-popup" hidden="{{hideShopPopup}}">
+    <view class="popup-mask" bindtap="closePopupTap"></view>
+    <view class="popup-contents">
+      <view class="popup-title">
+        <view class="popup-del" data-current="{{stid}}" bindtap="ClearShopCar">
+          <image src="../../images/view_clear.png" />清空购物车
+        </view>
+        <view class="close-del" bindtap="closePopupTap">
+          <image src="../../images/detail_down.png" />
+        </view>
+        <view class="popup-list-box">
+          <view class="popup-list" wx:for-items="{{list}}" wx:key="{{index}}">
+            <view class="popup-list-name">{{item.name}}</view>
+            <view class="popup-list-money">¥ {{item.price}}</view>
+            <view class="stepper">
+              <text class="{{minusStatus}}" data-current="{{item.goodsId}}" bindtap="bindMinus">-</text>
+              <input type="number" value="{{item.number}}" disabled />
+              <text class="normal" data-current="{{item.goodsId}}" bindtap="bindPlus">+</text>
+            </view>
+          </view>
+        </view>
+        <view class="popup-fooder">
+          <view class="popup-fooder-money">
+            订单总额
+            <text>¥{{totalPrice}}</text>
+          </view>
+          <view class="popup-fooder-btn" bindtap="buyNow">
+            确认购买
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

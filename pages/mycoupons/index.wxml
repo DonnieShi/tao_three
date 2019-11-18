@@ -1,0 +1,23 @@
+<view class="container">
+  <view class="new-coupons">
+    <view class="coupons-input">
+      <input class="input" type="coupons" placeholder="请输入兑换码" placeholder-style="color:#999" bindinput="listenerCouponsInput" data-id="{{busid}}"/>
+      <view class="primary" bindtap="listenerDuiHuan">兑换</view>
+    </view>
+  </view>
+  <view class="coupons">
+    <scroll-view class="coupons-scroll" scroll-x="true">
+        <view class="coupons-item" wx:for="{{coupons}}" wx:key="{{index}}">
+            <view class="coupon-money">{{item.money}}<text>元</text></view>
+            <view class="coupon-name">{{item.name}}</view>
+            <image class="coupon-ico" src="../../images/ticket_already.png"></image>
+            <view class="coupon-hold">满 {{item.moneyHreshold}} 元使用</view>
+            <view class="coupon-date">{{item.dateEnd}} 前有效</view>
+        </view>
+    </scroll-view>
+    <view hidden="{{loadingMoreHidden ? true : false}}" class="no-more-goods">
+      <image src="../../images/none_dish.png" class="no-order-img"></image>
+      <view class="text">还没有可用饭票</view>
+    </view>
+  </view>
+</view>

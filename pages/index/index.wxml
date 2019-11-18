@@ -1,0 +1,67 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="swiper-container">
+    <swiper class="swiper_box" autoplay="{{autoplay}}" previous-margin="40px" next-margin="25px" interval="{{interval}}" duration="{{duration}}" bindchange="swiperchange" circular="{{circular}}">
+      <block wx:for="{{banners}}" wx:key="id">
+        <swiper-item>
+          <image bindtap="tapBanner" data-id="{{item.businessId}}" src="{{item.picUrl}}_m" class="slide-image {{index == swiperCurrent ? 'SwiperHover' : ''}}" />
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+  <!--四个菜单图标-->
+  <view class="sale-banners">
+    <view class="sale-imge" wx:for="{{sales}}" wx:key="id" bindtap="{{item.businessId != 0 ? 'topicSales' : 'tapSales' }}" data-id="{{item.businessId != 0 ? item.businessId : item.linkUrl }}">
+      <image src="{{item.picUrl}}_m"></image>
+      {{item.title}}
+    </view>
+  </view>
+  <!--送优惠券-->
+  <view class="newcoupons" hidden="{{couponsmore}}">
+    <image bindtap="couponsBanner" src="{{newcoupons.picUrl}}" />
+  </view>
+  <!--3个板块推荐-->
+  <view class="specials">
+    <image wx:for="{{specials}}" wx:key="id" bindtap="specialsBanner" data-id="{{item.businessId}}" src="{{item.picUrl}}_m" />
+  </view>
+  <!--推荐商户-->
+  <view class="store">
+    <view class="store_name">推荐餐厅</view>
+    <view class="store_box">
+      <view class="store_list" wx:for-items="{{stores}}" wx:key="{{index}}" bindtap="storesTap" data-id="{{item.id}}">
+        <view class="store_list_title">{{item.name}}</view>
+        <view class="store_list_duce">{{item.introduce}}</view>
+        <view class="store_list_activ">{{item.activity}}</view>
+        <image class="store_list_img" src="{{item.characteristic}}" />
+        <view class="store_list_product">
+          <image wx:for-items="{{ccgoods[item.id]}}" wx:key="{{index}}" src="{{item.pic}}" class="store_list_product_img" />
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="show-popup" hidden="{{hasNoCoupons}}">
+    <view class="show-box">
+      <image class="show-coupons" src="{{newcoupons.linkUrl}}" bindtap="getcoupons" data-id="{{newcoupons.businessId}}"></image>
+      <image class="show-close" src="../../images/close.png" bindtap="couponsClose"></image>
+    </view>
+  </view>
+</view>
+<!--弹窗登录-->
+<view class="show-container" hidden="{{wxlogin}}">
+  <view class="show-box">
+    <view class="show-logo-box">
+      <image src="{{toplogo}}" />
+      <view class="show-mall-name">{{topname}}</view>
+    </view>
+    <view class="show-text-box">
+      <view class="show-text-name">需要您的授权才能正常使用哦！</view>
+      <view class="show-text-info">
+        <text>·</text>请允许我们获得您的公开资讯</view>
+      <view class="show-text-info">
+        <text>·</text>我们不会公布您的这些信息</view>
+      <view class="show-text-info">
+        <text>·</text>只是为了给您提供更好的服务</view>
+    </view>
+    <button open-type="getUserInfo" bindgetuserinfo="userlogin">允许</button>
+  </view>
+</view>

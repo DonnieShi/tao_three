@@ -1,0 +1,66 @@
+<view class="container"> 
+  <view class="store-money">
+    <view class="money-pro">
+      <view class="money-title">可用积分</view>
+      <view class="money-number">{{score}}<text>积分</text></view>
+      <view class="money-info" bindtap="getorderList">礼品兑换记录</view>
+    </view>
+  </view>
+  <view class="swiper-tab">  
+    <!-- 工厂API不完善，不能扣减积分，所以该功能待定-->
+    <view class="swiper-tab-list {{currentTab==0 ? 'on' : ''}}" data-current="0" bindtap="swichNav">兑换礼品</view> 
+    <view class="swiper-tab-list {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichNav">兑换饭票</view> 
+  </view> 
+  <swiper current="{{currentTab}}" class="swiper-box" duration="300" bindchange="bindChange">   
+    <swiper-item>  
+      <view class="store-product">
+        <view class="product-list" wx:for="{{contents}}" wx:key="id">
+          <image src="{{item.pic}}" />
+          <view class="product-info">
+            <view class="info-name">{{item.name}}</view>
+            <view class="info-score">{{item.minScore}}<text>积分</text></view>
+            <view class="info-money">¥{{item.originalPrice}}</view>
+            <view class="info-stock">限量 {{item.stores}}份</view>
+            <view class="info-btn {{score >= item.minScore ? 'active':''}}" hidden="{{score >= item.minScore ? '':'true'}}" bindtap="storeGeTap" data-id="{{item.id}}" data-pic="{{item.pic}}" data-name="{{item.name}}" data-price="{{item.originalPrice}}" data-score="{{item.minScore}}" >立即兑换</view>
+            <view class="info-btn" hidden="{{score >= item.minScore ? 'true':''}}">差{{item.minScore - score}}积分</view>
+          </view>
+        </view>
+      </view>
+    </swiper-item> 
+    <swiper-item>  
+      <view class="score-coupons">
+        <view class="coupons-box">
+          <view class="coupons-list" wx:for-items="{{scores}}" wx:key="{{index}}">
+            <image src="../../images/ticket.png" />
+            <view class="coupons-info">
+              <view class="coupons-name">{{item.moneyMax}}元</view>
+              <view class="coupons-type">{{item.name}}</view>
+              <view class="coupons-day">兑换需要{{item.needScore}}积分</view>
+              <view hidden="{{score >= item.needScore ? '':'true'}}" class="coupons-btn {{score >= item.needScore ? 'active':''}}" bindtap="gitCoupon" data-id="{{item.id}}">立即兑换</view>
+              <view hidden="{{score >= item.needScore ? 'true':''}}" class="coupons-btn">差{{item.needScore - score}}积分</view>
+            </view>
+          </view>
+        </view>
+      </view> 
+    </swiper-item>  
+  </swiper> 
+  <view class="show-notice" hidden="{{storePopup}}">
+    <view class="show-box">
+      <image class="close" src="../../images/popup-close.png" bindtap="storePopupTap"/>
+      <view class="show-protuct-box">
+        <image src="{{storeinfo.pic}}" />
+        <view class="show-product-name">{{storeinfo.title}}</view>
+        <view class="show-product-money">{{storeinfo.tags}}积分</view>
+        <view class="show-product-stock">限量{{storeinfo.income}}份</view>
+      </view>
+      <view class="show-notice-text">
+        <input type="text" placeholder="收件人" />
+        <input type="text" placeholder="联系电话" />
+        <input type="text" placeholder="收货地址" />
+        <view class="show-btn" bindtap="sendTap" data-id="{{storeinfo.id}}">确认兑换</view>
+      </view>
+      <view class="show-text-info">{{storeinfo.descript}}</view>
+    </view>
+  </view>
+  
+</view>
